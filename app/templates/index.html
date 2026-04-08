@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeGuard AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100">
+    <div class="max-w-5xl mx-auto p-8">
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-bold mb-3 text-emerald-500">🛡️ CodeGuard AI</h1>
+            <p class="text-zinc-400">Local AI Code Reviewer • Powered by Ollama</p>
+        </div>
+
+        <form id="reviewForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium mb-2">Language</label>
+                <select name="language" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-3">
+                    <option value="Python">Python</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="TypeScript">TypeScript</option>
+                    <option value="Java">Java</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-2">Paste your code</label>
+                <textarea name="code" rows="14" 
+                          class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 font-mono text-sm resize-y"
+                          placeholder="def calculate_sum(a, b): ..."></textarea>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl font-semibold text-lg transition">
+                Get Professional Code Review
+            </button>
+        </form>
+
+        <div id="result" class="mt-12 hidden"></div>
+    </div>
+
+    <script>
+        document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const resultDiv = document.getElementById('result');
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = `<p class="text-center text-zinc-400">Reviewing code with local LLM... Please wait.</p>`;
+
+            const res = await fetch('/review', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            resultDiv.innerHTML = `
+                <div class="bg-zinc-900 border border-zinc-700 rounded-3xl p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">Review Results</h2>
+                        <span class="text-3xl font-bold ${data.review.score >= 7 ? 'text-emerald-500' : 'text-amber-500'}">${data.review.score}/10</span>
+                    </div>
+                    <p class="text-lg mb-6">${data.review.summary}</p>
+                    <pre class="bg-black p-6 rounded-2xl overflow-auto text-emerald-300 text-sm">${JSON.stringify(data.review, null, 2)}</pre>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
