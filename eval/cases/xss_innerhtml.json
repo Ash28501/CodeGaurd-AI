@@ -1,0 +1,13 @@
+{
+  "name": "xss_innerhtml",
+  "language": "JavaScript",
+  "expected_category": "security",
+  "keywords": [
+    "xss",
+    "innerhtml",
+    "escape",
+    "sanitiz",
+    "script"
+  ],
+  "code": "function showComment(comment) {\n  // comment.text is user-submitted\n  document.getElementById(\"c\").innerHTML = comment.text;\n}\n"
+}

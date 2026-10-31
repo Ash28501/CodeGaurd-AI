@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt pytest ruff
+      - name: Lint (Ruff)
+        run: ruff check .
+      - name: Format check (Ruff)
+        run: ruff format --check app tests eval
+      - name: Tests (Ollama mocked)
+        run: pytest -q
+      - name: App imports and serves /health
+        run: python -c "from fastapi.testclient import TestClient; from app.main import app; r = TestClient(app).get('/health'); assert r.status_code == 200, r.text"
+      - name: Build image
+        run: docker build -t codeguard:ci .

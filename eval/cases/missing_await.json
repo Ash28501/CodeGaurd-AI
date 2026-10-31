@@ -1,0 +1,11 @@
+{
+  "name": "missing_await",
+  "language": "JavaScript",
+  "expected_category": "bug",
+  "keywords": [
+    "await",
+    "promise",
+    "async"
+  ],
+  "code": "async function saveUser(db, user) {\n  db.users.insert(user);\n  return { ok: true };\n}\n"
+}

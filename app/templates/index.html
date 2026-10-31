@@ -41,6 +41,8 @@
     </div>
 
     <script>
+        // Model output is untrusted: escape before inserting into the page.
+        const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         document.getElementById('reviewForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -50,17 +52,29 @@
 
             const res = await fetch('/review', { method: 'POST', body: formData });
             const data = await res.json();
-
+            if (!res.ok) {
+                resultDiv.innerHTML = `<p class="text-center text-red-400">${esc(data.detail || 'Review failed')}</p>`;
+                return;
+            }
+            const r = data.review;
+            const colors = { critical: 'text-red-500', high: 'text-orange-400', medium: 'text-amber-300', low: 'text-zinc-400' };
+            const issues = r.issues.map(i => `
+                <li class="border border-zinc-800 rounded-xl p-4">
+                    <div class="text-sm mb-1"><span class="${colors[i.severity]} font-semibold uppercase">${esc(i.severity)}</span>
+                    · ${esc(i.category)}${i.line ? ` · line ${i.line}` : ''}</div>
+                    <p>${esc(i.description)}</p>
+                    <p class="text-emerald-300 text-sm mt-2">Fix: ${esc(i.suggestion)}</p>
+                </li>`).join('');
             resultDiv.innerHTML = `
                 <div class="bg-zinc-900 border border-zinc-700 rounded-3xl p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold">Review Results</h2>
-                        <span class="text-3xl font-bold ${data.review.score >= 7 ? 'text-emerald-500' : 'text-amber-500'}">${data.review.score}/10</span>
+                        <span class="text-3xl font-bold ${r.score >= 7 ? 'text-emerald-500' : 'text-amber-500'}">${r.score}/10</span>
                     </div>
-                    <p class="text-lg mb-6">${data.review.summary}</p>
-                    <pre class="bg-black p-6 rounded-2xl overflow-auto text-emerald-300 text-sm">${JSON.stringify(data.review, null, 2)}</pre>
-                </div>
-            `;
+                    <p class="text-lg mb-6">${esc(r.summary)}</p>
+                    <ul class="space-y-3">${issues || '<li class="text-zinc-400">No issues found.</li>'}</ul>
+                    ${r.refactored_code ? `<pre class="bg-black p-6 mt-6 rounded-2xl overflow-auto text-emerald-300 text-sm">${esc(r.refactored_code)}</pre>` : ''}
+                </div>`;
         });
     </script>
 </body>

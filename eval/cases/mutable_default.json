@@ -1,0 +1,11 @@
+{
+  "name": "mutable_default",
+  "language": "Python",
+  "expected_category": "bug",
+  "keywords": [
+    "mutable",
+    "default",
+    "shared"
+  ],
+  "code": "def add_item(item, items=[]):\n    items.append(item)\n    return items\n"
+}
