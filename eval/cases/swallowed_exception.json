@@ -1,0 +1,13 @@
+{
+  "name": "swallowed_exception",
+  "language": "Python",
+  "expected_category": "maintainability",
+  "keywords": [
+    "except",
+    "swallow",
+    "silent",
+    "broad",
+    "pass"
+  ],
+  "code": "def load_config(path):\n    try:\n        with open(path) as f:\n            return f.read()\n    except:\n        pass\n"
+}

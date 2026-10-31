@@ -1,0 +1,11 @@
+{
+  "name": "eval_user_input",
+  "language": "Python",
+  "expected_category": "security",
+  "keywords": [
+    "eval",
+    "arbitrary",
+    "execut"
+  ],
+  "code": "def calculate(expression: str):\n    # expression comes straight from the HTTP request body\n    return eval(expression)\n"
+}

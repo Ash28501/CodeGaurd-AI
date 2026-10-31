@@ -1,0 +1,11 @@
+{
+  "name": "zero_division",
+  "language": "Python",
+  "expected_category": "bug",
+  "keywords": [
+    "zero",
+    "empty",
+    "division"
+  ],
+  "code": "def average(scores):\n    return sum(scores) / len(scores)\n"
+}

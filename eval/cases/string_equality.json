@@ -1,0 +1,12 @@
+{
+  "name": "string_equality",
+  "language": "Java",
+  "expected_category": "bug",
+  "keywords": [
+    "equals",
+    "==",
+    "reference",
+    "compar"
+  ],
+  "code": "public boolean isAdmin(String role) {\n    return role == \"ADMIN\";\n}\n"
+}

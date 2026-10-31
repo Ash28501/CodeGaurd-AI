@@ -1,0 +1,12 @@
+{
+  "name": "resource_leak",
+  "language": "Java",
+  "expected_category": "bug",
+  "keywords": [
+    "close",
+    "leak",
+    "resource",
+    "try-with"
+  ],
+  "code": "public String readFirstLine(String path) throws IOException {\n    BufferedReader reader = new BufferedReader(new FileReader(path));\n    return reader.readLine();\n}\n"
+}

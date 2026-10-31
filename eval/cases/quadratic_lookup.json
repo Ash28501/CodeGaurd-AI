@@ -1,0 +1,13 @@
+{
+  "name": "quadratic_lookup",
+  "language": "Python",
+  "expected_category": "performance",
+  "keywords": [
+    "o(n",
+    "quadratic",
+    "set",
+    "complexity",
+    "slow"
+  ],
+  "code": "def common(a, b):\n    out = []\n    for x in a:\n        if x in b and x not in out:   # a and b are lists of ~1M ids\n            out.append(x)\n    return out\n"
+}

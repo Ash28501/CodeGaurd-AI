@@ -1,0 +1,13 @@
+{
+  "name": "off_by_one",
+  "language": "Python",
+  "expected_category": "bug",
+  "keywords": [
+    "index",
+    "range",
+    "off-by-one",
+    "out of",
+    "bound"
+  ],
+  "code": "def last_n(values, n):\n    result = []\n    for i in range(len(values) - n, len(values) + 1):\n        result.append(values[i])\n    return result\n"
+}

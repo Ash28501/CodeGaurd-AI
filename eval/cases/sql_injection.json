@@ -1,0 +1,11 @@
+{
+  "name": "sql_injection",
+  "language": "Python",
+  "expected_category": "security",
+  "keywords": [
+    "inject",
+    "sql",
+    "parameter"
+  ],
+  "code": "def get_user(conn, username):\n    cur = conn.cursor()\n    cur.execute(f\"SELECT * FROM users WHERE name = '{username}'\")\n    return cur.fetchone()\n"
+}
